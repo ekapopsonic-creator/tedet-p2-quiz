@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>คลังข้อสอบ TEDET ป.2 — คณิตศาสตร์ & วิทยาศาสตร์</title>
+<meta name="description" content="รวมข้อสอบ TEDET ระดับ ป.2 วิชาคณิตศาสตร์และวิทยาศาสตร์ พร้อมเฉลย ฝึกทำพร้อมตรวจคะแนนอัตโนมัติ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4f46e5; --indigo-dark:#4338ca;
+    --math:#2563eb; --math-soft:#dbeafe;
+    --sci:#059669; --sci-soft:#d1fae5;
+    --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --bg:#f1f5f9; --card:#ffffff;
+    --ok:#16a34a; --ok-soft:#dcfce7;
+    --bad:#dc2626; --bad-soft:#fee2e2;
+    --warn:#d97706; --warn-soft:#fef3c7;
+    --shadow:0 6px 24px rgba(15,23,42,.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:'Sarabun',system-ui,sans-serif; color:var(--ink);
+    background:linear-gradient(160deg,#eef2ff 0%,#f1f5f9 40%,#ecfdf5 100%);
+    background-attachment:fixed; min-height:100vh; line-height:1.55;
+  }
+  h1,h2,h3,.brand,.btn,.badge,.nav-btn,.qnum{font-family:'Kanit',sans-serif}
+  .wrap{max-width:980px; margin:0 auto; padding:18px 16px 90px}
+
+  header{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; cursor:pointer}
+  .logo{width:54px; height:54px; border-radius:16px; flex:0 0 auto;
+    background:linear-gradient(135deg,var(--indigo),#7c3aed); display:grid; place-items:center; color:#fff; font-size:28px; box-shadow:var(--shadow)}
+  .brand h1{margin:0; font-size:1.3rem; line-height:1.2}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:.9rem}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow)}
+  .muted{color:var(--muted)} .hidden{display:none !important}
+  .btn{border:none; border-radius:12px; padding:11px 18px; font-size:1rem; cursor:pointer; background:var(--indigo); color:#fff; transition:.15s; font-weight:500; font-family:'Kanit'}
+  .btn:hover{background:var(--indigo-dark)} .btn:disabled{opacity:.5; cursor:not-allowed}
+  .btn.ghost{background:#fff; color:var(--ink); border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--indigo); color:var(--indigo)}
+  .btn.sm{padding:7px 13px; font-size:.88rem; border-radius:10px}
+  .btn.math{background:var(--math)} .btn.math:hover{background:#1d4ed8}
+  .btn.sci{background:var(--sci)} .btn.sci:hover{background:#047857}
+  .btn.block{width:100%; text-align:center}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .badge{font-size:.72rem; padding:3px 10px; border-radius:999px; font-weight:600; display:inline-block; white-space:nowrap}
+  .b-math{background:var(--math-soft); color:#1e40af}
+  .b-sci{background:var(--sci-soft); color:#065f46}
+  .b-key{background:var(--ok-soft); color:#15803d}
+  .b-nokey{background:var(--warn-soft); color:#b45309}
+
+  /* paper grid */
+  .papers{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px}
+  .paper{border-radius:var(--radius); border:1px solid var(--line); background:#fff; box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column}
+  .paper .top{padding:16px 18px 12px; border-top:5px solid var(--math)}
+  .paper.sci .top{border-color:var(--sci)}
+  .paper h3{margin:0 0 8px; font-size:1.15rem}
+  .paper .meta{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px}
+  .paper .body{padding:0 18px 16px; margin-top:auto}
+  .paper .best{font-size:.82rem; color:var(--muted); margin:8px 0 12px; min-height:1.2em}
+  .paper .actions{display:flex; gap:8px}
+  .paper .actions .btn{flex:1; padding:10px}
+
+  .note{background:var(--warn-soft); border-left:4px solid var(--warn); padding:12px 16px; border-radius:10px; font-size:.9rem; margin-top:18px}
+
+  /* sticky toolbar */
+  .toolbar{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.92); backdrop-filter:blur(8px);
+    border:1px solid var(--line); border-radius:14px; padding:10px 14px; display:flex; align-items:center; gap:10px; margin-bottom:16px; box-shadow:var(--shadow)}
+  .toolbar .t-title{font-family:'Kanit'; font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+  /* page reader */
+  .pages{display:flex; flex-direction:column; gap:16px; align-items:center}
+  .page{width:100%; max-width:860px; position:relative}
+  .page img{width:100%; display:block; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); cursor:zoom-in; background:#fff}
+  .page .pno{position:absolute; top:8px; left:8px; background:rgba(30,41,59,.75); color:#fff; font-size:.72rem; padding:2px 9px; border-radius:999px; font-family:'Kanit'}
+
+  /* lightbox */
+  .lightbox{position:fixed; inset:0; background:rgba(15,23,42,.92); z-index:100; display:none; align-items:center; justify-content:center; padding:12px; cursor:zoom-out; overflow:auto}
+  .lightbox.show{display:flex}
+  .lightbox img{max-width:100%; height:auto; border-radius:8px}
+  .lightbox .close{position:fixed; top:14px; right:18px; color:#fff; font-size:34px; cursor:pointer; line-height:1; font-family:'Kanit'}
+
+  /* floating answer button */
+  .fab{position:fixed; left:50%; transform:translateX(-50%); bottom:20px; z-index:30;
+    background:var(--indigo); color:#fff; border:none; border-radius:999px; padding:14px 26px; font-size:1.05rem; font-family:'Kanit'; font-weight:600;
+    box-shadow:0 10px 30px rgba(79,70,229,.45); cursor:pointer; display:flex; gap:8px; align-items:center}
+  .fab:hover{background:var(--indigo-dark)}
+
+  /* answer sheet modal */
+  .modal{position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:90; display:none; align-items:flex-end; justify-content:center}
+  .modal.show{display:flex}
+  .sheet{background:#fff; width:100%; max-width:680px; max-height:88vh; border-radius:20px 20px 0 0; display:flex; flex-direction:column; box-shadow:0 -10px 40px rgba(0,0,0,.2)}
+  @media(min-width:560px){ .modal{align-items:center} .sheet{border-radius:20px; max-height:86vh} }
+  .sheet .sh-head{padding:16px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px}
+  .sheet .sh-head h3{margin:0; flex:1; font-size:1.1rem}
+  .sheet .sh-body{padding:16px 20px; overflow:auto}
+  .sheet .sh-foot{padding:14px 20px; border-top:1px solid var(--line)}
+  .ans-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px}
+  .ans-cell{display:flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:10px; padding:6px 8px}
+  .ans-cell .qnum{width:30px; height:30px; flex:0 0 auto; border-radius:8px; background:var(--bg); display:grid; place-items:center; font-weight:700; font-size:.9rem}
+  .ans-cell input{width:100%; border:none; outline:none; font-size:1.05rem; font-family:'Sarabun'; min-width:0; background:transparent}
+  .ans-cell input:focus{background:#f5f3ff}
+  .ans-cell.correct{background:var(--ok-soft); border-color:var(--ok)}
+  .ans-cell.wrong{background:var(--bad-soft); border-color:var(--bad)}
+  .ans-cell .res{font-size:.72rem; font-family:'Kanit'; white-space:nowrap}
+  .ans-cell .res b{display:block; font-weight:700}
+
+  .result-circle{width:120px;height:120px;border-radius:50%;margin:4px auto;display:grid;place-items:center;background:conic-gradient(var(--indigo) var(--p,0%),var(--line) 0)}
+  .result-circle .inner{width:96px;height:96px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+  .result-circle .pct{font-family:'Kanit';font-size:1.5rem;font-weight:700}
+
+  .toast{position:fixed; left:50%; bottom:84px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 20px; border-radius:12px; font-size:.95rem; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:.25s; z-index:120}
+  .toast.show{opacity:1}
+  footer{text-align:center; color:var(--muted); font-size:.82rem; margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header id="home-link">
+    <div class="logo">🎓</div>
+    <div class="brand">
+      <h1>คลังข้อสอบ TEDET ป.2</h1>
+      <p>ข้อสอบจริง + เฉลย · คณิตศาสตร์ และ วิทยาศาสตร์ · ฝึกทำพร้อมตรวจคะแนน</p>
+    </div>
+  </header>
+
+  <!-- ============ HOME : paper grid ============ -->
+  <section id="view-home">
+    <div class="papers" id="paper-grid"></div>
+    <div class="note">
+      📌 <b>หมายเหตุ</b> — บางชุดยังไม่มีไฟล์เฉลยตรงชั้น จึงเปิดอ่านได้แต่ยังตรวจคะแนนอัตโนมัติไม่ได้
+      (วิทยาศาสตร์ 2568 ป.2 ไฟล์เฉลยที่มีเป็นของ ป.3 / คณิต 2564 ยังไม่มีไฟล์เฉลย)
+      หากมีไฟล์เฉลยที่ถูกต้อง ส่งมาเพิ่มได้เลยครับ
+    </div>
+  </section>
+
+  <!-- ============ READER / PRACTICE : question pages ============ -->
+  <section id="view-pages" class="hidden">
+    <div class="toolbar">
+      <button class="btn ghost sm" id="pages-back">← กลับ</button>
+      <div class="t-title" id="pages-title">—</div>
+      <button class="btn ghost sm" id="pages-explain">📖 เฉลย</button>
+    </div>
+    <div class="pages" id="pages-list"></div>
+  </section>
+
+  <!-- ============ EXPLANATION pages ============ -->
+  <section id="view-explain" class="hidden">
+    <div class="toolbar">
+      <button class="btn ghost sm" id="explain-back">← กลับ</button>
+      <div class="t-title" id="explain-title">เฉลย</div>
+    </div>
+    <div class="pages" id="explain-list"></div>
+  </section>
+
+  <footer>สร้างโดย โคดี้ · 99Plus Agency OS — ข้อสอบจาก TEDET (tedet.or.th) เพื่อการฝึกฝน · ใช้งานออฟไลน์ได้</footer>
+</div>
+
+<!-- floating answer button (practice mode) -->
+<button class="fab hidden" id="fab-answer">📝 ทำกระดาษคำตอบ</button>
+
+<!-- answer sheet modal -->
+<div class="modal" id="answer-modal">
+  <div class="sheet">
+    <div class="sh-head">
+      <h3 id="sheet-title">กระดาษคำตอบ</h3>
+      <button class="btn ghost sm" id="sheet-close">ปิด</button>
+    </div>
+    <div class="sh-body" id="sheet-body"></div>
+    <div class="sh-foot" id="sheet-foot"></div>
+  </div>
+</div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox"><span class="close">✕</span><img id="lightbox-img" alt=""></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   คลังข้อสอบ TEDET ป.2 — image-based past-paper trainer
+   หน้าโจทย์/เฉลย = รูปภาพจริง · ตรวจคะแนนจากตารางเฉลย
+   ========================================================= */
+
+const PAPERS = [
+  { id:'2567-math', subject:'math', year:2567, title:'คณิตศาสตร์ 2567', count:30, qPages:7, aPages:8,
+    answers:{1:'6',2:'3',3:'34',4:'45',5:'3',6:'21',7:'124',8:'154',9:'30',10:'4',11:'700',12:'7',13:'48',14:'2',15:'4',16:'4',17:'5',18:'291',19:'5',20:'43',21:'20',22:'4',23:'8',24:'10',25:'6',26:'2',27:'4',28:'5',29:'6',30:'2'} },
+
+  { id:'2567-sci', subject:'science', year:2567, title:'วิทยาศาสตร์ 2567', count:30, qPages:11, aPages:5,
+    answers:{1:'2',2:'2',3:'3',4:['1','4'],5:['2','3'],6:'2',7:'2',8:'3',9:'3',10:'4',11:'4',12:'4',13:'2',14:'2',15:'2',16:'2',17:['1','4'],18:'2',19:'3',20:['2','4'],21:'1',22:'1',23:['1','3'],24:'4',25:['2','4'],26:'3',27:'3',28:'3',29:'2',30:'4'} },
+
+  { id:'2568-math', subject:'math', year:2568, title:'คณิตศาสตร์ 2568', count:30, qPages:6, aPages:6,
+    answers:{1:'158',2:'600',3:'7',4:'35',5:'1',6:'72',7:'5',8:'19',9:'9',10:'23',11:'24',12:'5',13:'3',14:'3',15:'60',16:'10',17:'126',18:'2',19:'12',20:'68',21:'1',22:'3',23:'678',24:'3',25:'86',26:'3',27:'150',28:'8',29:'6',30:'9'} },
+
+  { id:'2568-sci', subject:'science', year:2568, title:'วิทยาศาสตร์ 2568', count:30, qPages:11, aPages:0,
+    answers:null, noKeyReason:'ไฟล์เฉลยที่ส่งมาเป็นของ ป.3 (ไม่ตรงชั้น ป.2)' },
+
+  { id:'2564-math', subject:'math', year:2564, title:'คณิตศาสตร์ 2564', count:30, qPages:6, aPages:0,
+    answers:null, noKeyReason:'ยังไม่มีไฟล์เฉลย' },
+];
+
+const SUBJ = { math:{th:'คณิตศาสตร์', ic:'🔢', cls:'b-math', btn:'math'},
+               science:{th:'วิทยาศาสตร์', ic:'🔬', cls:'b-sci', btn:'sci'} };
+const byId = id => PAPERS.find(p=>p.id===id);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
+const imgPath = (id,kind,n) => `img/${id}-${kind}-${n}.jpg`;
+
+/* ---- best score storage ---- */
+const SKEY='tedet_best_scores';
+function bestScores(){ try{ return JSON.parse(localStorage.getItem(SKEY))||{}; }catch(e){ return {}; } }
+function setBest(id,score,total){ const b=bestScores(); if(!b[id]||score>b[id].score){ b[id]={score,total}; localStorage.setItem(SKEY,JSON.stringify(b)); } }
+
+/* ---- view router ---- */
+function show(view){ $$('section[id^=view-]').forEach(s=>s.classList.add('hidden')); $('#view-'+view).classList.remove('hidden');
+  $('#fab-answer').classList.toggle('hidden', !(view==='pages' && current && current.mode==='practice' && byId(current.id).answers));
+  window.scrollTo({top:0,behavior:'instant'}); }
+$('#home-link').onclick = goHome;
+function goHome(){ current=null; $('#fab-answer').classList.add('hidden'); renderHome(); show('home'); }
+
+/* ---- HOME ---- */
+function renderHome(){
+  const best=bestScores();
+  $('#paper-grid').innerHTML = PAPERS.map(p=>{
+    const s=SUBJ[p.subject], hasKey=!!p.answers, b=best[p.id];
+    return `<div class="paper ${p.subject==='science'?'sci':''}">
+      <div class="top" style="border-color:var(--${s.btn})">
+        <div class="meta">
+          <span class="badge ${s.cls}">${s.ic} ${s.th}</span>
+          <span class="badge ${hasKey?'b-key':'b-nokey'}">${hasKey?'✓ มีเฉลย':'อ่านอย่างเดียว'}</span>
+        </div>
+        <h3>${s.ic} ${p.title}</h3>
+        <div class="muted" style="font-size:.9rem">ปีการศึกษา ${p.year} · ${p.count} ข้อ</div>
+      </div>
+      <div class="body">
+        <div class="best">${b?('🏆 คะแนนสูงสุด '+b.score+'/'+b.total):(hasKey?'ยังไม่เคยทำ':'')}</div>
+        <div class="actions">
+          <button class="btn ghost" data-read="${p.id}">📖 อ่านโจทย์</button>
+          ${hasKey?`<button class="btn ${s.btn}" data-practice="${p.id}">📝 ทำข้อสอบ</button>`
+                  :`<button class="btn ghost" data-read="${p.id}" disabled style="opacity:.5">ยังไม่มีเฉลย</button>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  $$('[data-read]').forEach(b=> b.onclick=()=>openPages(b.dataset.read,'read'));
+  $$('[data-practice]').forEach(b=> b.onclick=()=>openPages(b.dataset.practice,'practice'));
+}
+
+/* ---- PAGES (reader / practice) ---- */
+let current=null; // {id, mode}
+function openPages(id,mode){
+  current={id,mode};
+  const p=byId(id);
+  $('#pages-title').textContent = (mode==='practice'?'📝 ทำข้อสอบ — ':'📖 ') + p.title;
+  $('#pages-explain').classList.toggle('hidden', !p.answers && p.aPages===0);
+  $('#pages-list').innerHTML = Array.from({length:p.qPages},(_,i)=>`
+    <div class="page"><span class="pno">หน้า ${i+1}/${p.qPages}</span>
+      <img loading="lazy" src="${imgPath(id,'q',i+1)}" alt="${p.title} หน้า ${i+1}" data-zoom></div>`).join('');
+  show('pages');
+}
+$('#pages-back').onclick = goHome;
+$('#pages-explain').onclick = ()=> current && openExplain(current.id);
+
+/* ---- EXPLANATION ---- */
+function openExplain(id){
+  const p=byId(id);
+  if(p.aPages===0){ toast('ชุดนี้ยังไม่มีไฟล์เฉลย'); return; }
+  $('#explain-title').textContent = '📖 เฉลย — ' + p.title;
+  $('#explain-list').innerHTML = Array.from({length:p.aPages},(_,i)=>`
+    <div class="page"><span class="pno">เฉลย ${i+1}/${p.aPages}</span>
+      <img loading="lazy" src="${imgPath(id,'a',i+1)}" alt="เฉลย ${p.title} หน้า ${i+1}" data-zoom></div>`).join('');
+  show('explain');
+}
+$('#explain-back').onclick = ()=>{ if(current){ show('pages'); } else goHome(); };
+
+/* ---- ANSWER SHEET (practice) ---- */
+$('#fab-answer').onclick = openSheet;
+function openSheet(){
+  const p=byId(current.id);
+  $('#sheet-title').textContent = 'กระดาษคำตอบ — ' + p.title;
+  let cells='';
+  for(let q=1;q<=p.count;q++){
+    cells += `<div class="ans-cell" id="cell-${q}">
+      <span class="qnum">${q}</span>
+      <input inputmode="numeric" autocomplete="off" data-q="${q}" placeholder="คำตอบ">
+    </div>`;
+  }
+  $('#sheet-body').innerHTML = `<p class="muted" style="margin:0 0 12px; font-size:.88rem">
+    กรอกคำตอบแต่ละข้อ — เป็น <b>หมายเลขข้อ</b> (1-5) หรือ <b>ตัวเลขคำตอบ</b> · บางข้อตอบได้มากกว่า 1 ตัว ให้คั่นด้วยจุลภาค เช่น 1,4</p>
+    <div class="ans-grid">${cells}</div>`;
+  $('#sheet-foot').innerHTML = `<button class="btn block" id="sheet-grade">✅ ตรวจคำตอบ</button>`;
+  $('#sheet-grade').onclick = gradeSheet;
+  $('#answer-modal').classList.add('show');
+}
+$('#sheet-close').onclick = ()=> $('#answer-modal').classList.remove('show');
+$('#answer-modal').onclick = e=>{ if(e.target.id==='answer-modal') $('#answer-modal').classList.remove('show'); };
+
+function tokSet(s){ return (String(s).match(/\d+/g)||[]).slice().sort().join(','); }
+function digits(s){ return (s||'').replace(/[^0-9]/g,''); }
+function isCorrect(key,val){
+  if(val==null||val.trim()==='') return false;
+  if(Array.isArray(key)) return tokSet(val)===key.slice().sort().join(',');
+  return digits(val)===digits(String(key));
+}
+function keyText(key){ return Array.isArray(key)? key.join(', ') : String(key); }
+
+function gradeSheet(){
+  const p=byId(current.id); let score=0, blank=0;
+  for(let q=1;q<=p.count;q++){
+    const input=$(`input[data-q="${q}"]`); const val=input.value;
+    const cell=$('#cell-'+q); const key=p.answers[q]; const ok=isCorrect(key,val);
+    if(!val.trim()) blank++;
+    cell.classList.remove('correct','wrong'); cell.classList.add(ok?'correct':'wrong');
+    input.disabled=true;
+    let res=cell.querySelector('.res'); if(!res){ res=document.createElement('span'); res.className='res'; cell.appendChild(res); }
+    res.innerHTML = ok ? '✓' : `<b style="color:var(--bad)">✕</b><span class="muted">เฉลย ${keyText(key)}</span>`;
+    if(ok) score++;
+  }
+  setBest(p.id,score,p.count);
+  const pct=Math.round(score/p.count*100);
+  let msg = pct===100?'🏆 เพอร์เฟกต์!' : pct>=80?'🌟 เก่งมาก!' : pct>=50?'💪 ทำได้ดี ฝึกต่อ!' : '📖 ทบทวนเฉลยแล้วลองใหม่นะ';
+  $('#sheet-foot').innerHTML = `
+    <div class="row" style="align-items:center; gap:16px; margin-bottom:12px">
+      <div class="result-circle" style="--p:${pct}%"><div class="inner"><div><span class="pct">${pct}%</span></div></div></div>
+      <div><div style="font-family:'Kanit'; font-size:1.2rem; font-weight:700">${score} / ${p.count} ข้อ</div>
+        <div class="muted">${msg}${blank?` · เว้นว่าง ${blank} ข้อ`:''}</div></div>
+    </div>
+    <div class="row" style="flex-wrap:nowrap">
+      <button class="btn ghost" style="flex:1" id="sheet-retry">↺ ทำใหม่</button>
+      <button class="btn" style="flex:1" id="sheet-seeexplain">📖 ดูเฉลยละเอียด</button>
+    </div>`;
+  $('#sheet-body').scrollTop=0;
+  $('#sheet-retry').onclick = openSheet;
+  $('#sheet-seeexplain').onclick = ()=>{ $('#answer-modal').classList.remove('show'); openExplain(p.id); };
+  renderHome(); // refresh best score on home (behind)
+}
+
+/* ---- LIGHTBOX (zoom any page) ---- */
+const lb=$('#lightbox'), lbImg=$('#lightbox-img');
+document.addEventListener('click', e=>{
+  const z=e.target.closest('[data-zoom]'); if(z){ lbImg.src=z.src; lb.classList.add('show'); }
+});
+lb.onclick = ()=> lb.classList.remove('show');
+
+/* ---- init ---- */
+goHome();
+</script>
+</body>
+</html>
