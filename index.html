@@ -116,6 +116,40 @@
   .toast{position:fixed; left:50%; bottom:84px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 20px; border-radius:12px; font-size:.95rem; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:.25s; z-index:120}
   .toast.show{opacity:1}
   footer{text-align:center; color:var(--muted); font-size:.82rem; margin-top:30px}
+
+  /* one-question mode */
+  .oneq-counter{font-family:'Kanit'; font-weight:600; text-align:center; color:var(--muted); margin:2px 0 12px}
+  .qimg-wrap{background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:14px; max-width:760px; margin:0 auto}
+  .qimg-wrap img{width:100%; display:block; border-radius:8px; cursor:zoom-in}
+  .answer-box{max-width:760px; margin:16px auto 0; background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:var(--shadow)}
+  .answer-box label{font-family:'Kanit'; font-weight:600; display:block; margin-bottom:8px}
+  .answer-row{display:flex; gap:10px}
+  .answer-row input{flex:1; border:2px solid var(--line); border-radius:12px; padding:13px 16px; font-size:1.25rem; font-family:'Sarabun'}
+  .answer-row input:focus{outline:none; border-color:var(--indigo)}
+  .answer-row .btn{padding:0 26px; font-size:1.1rem}
+  .hint{font-size:.82rem; margin-top:9px}
+  #oneq-feedback{max-width:760px; margin:14px auto 0}
+  .fb{border-radius:14px; padding:16px 18px; font-size:1.1rem; font-family:'Kanit'; font-weight:600; display:flex; align-items:center; gap:10px}
+  .fb.ok{background:var(--ok-soft); color:#14532d; border:1.5px solid var(--ok)}
+  .fb.no{background:var(--bad-soft); color:#7f1d1d; border:1.5px solid var(--bad)}
+  .oneq-nav{max-width:760px; margin:18px auto 0; display:flex; gap:10px}
+  .oneq-nav .btn{flex:1}
+  #oneq-jump{flex:0 0 auto; min-width:96px}
+
+  .review-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-top:16px}
+  .review-item{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 12px; cursor:pointer; transition:.12s}
+  .review-item:hover{border-color:var(--indigo)}
+  .review-item.correct{border-left:5px solid var(--ok)}
+  .review-item.wrong{border-left:5px solid var(--bad)}
+  .review-item .rq{font-family:'Kanit'; font-weight:700}
+  .review-item .ra{font-size:.85rem; color:var(--muted)}
+
+  /* jump grid modal */
+  .jump-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:8px}
+  .jump-cell{aspect-ratio:1; border:1.5px solid var(--line); border-radius:10px; display:grid; place-items:center; font-family:'Kanit'; font-weight:700; cursor:pointer; background:#fff}
+  .jump-cell.correct{background:var(--ok-soft); border-color:var(--ok); color:#14532d}
+  .jump-cell.wrong{background:var(--bad-soft); border-color:var(--bad); color:#7f1d1d}
+  .jump-cell.now{outline:3px solid var(--indigo); outline-offset:1px}
 </style>
 </head>
 <body>
@@ -149,6 +183,54 @@
     <div class="pages" id="pages-list"></div>
   </section>
 
+  <!-- ============ ONE-QUESTION-AT-A-TIME quiz ============ -->
+  <section id="view-oneq" class="hidden">
+    <div class="toolbar">
+      <button class="btn ghost sm" id="oneq-back">← กลับ</button>
+      <div class="t-title" id="oneq-title">—</div>
+      <button class="btn ghost sm" id="oneq-explain">📖 เฉลย</button>
+    </div>
+    <div class="progress"><div id="oneq-bar"></div></div>
+    <div class="oneq-counter" id="oneq-counter">ข้อ 1 / 30</div>
+
+    <div class="qimg-wrap"><img id="oneq-img" alt="" data-zoom></div>
+
+    <div class="answer-box" id="oneq-answerbox">
+      <label for="oneq-input">✏️ คำตอบของหนู</label>
+      <div class="answer-row">
+        <input id="oneq-input" inputmode="numeric" autocomplete="off" placeholder="พิมพ์คำตอบ...">
+        <button class="btn" id="oneq-check">ตรวจ</button>
+      </div>
+      <div class="hint muted">ตอบเป็นหมายเลขข้อ (1-5) หรือตัวเลขคำตอบ · บางข้อตอบได้หลายตัว คั่นด้วยจุลภาค เช่น 1,4</div>
+    </div>
+
+    <div id="oneq-feedback" class="hidden"></div>
+
+    <div class="oneq-nav">
+      <button class="btn ghost" id="oneq-prev">‹ ข้อก่อนหน้า</button>
+      <button class="btn ghost" id="oneq-jump">▦ ทุกข้อ</button>
+      <button class="btn" id="oneq-next">ข้อถัดไป ›</button>
+    </div>
+  </section>
+
+  <!-- ============ ONE-QUESTION result summary ============ -->
+  <section id="view-oneqresult" class="hidden">
+    <div class="toolbar">
+      <button class="btn ghost sm" id="oneqr-back">← หน้าแรก</button>
+      <div class="t-title" id="oneqr-title">ผลคะแนน</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="result-circle" id="oneqr-circle"><div class="inner"><div><span class="pct" id="oneqr-pct">0%</span></div></div></div>
+      <div style="font-family:'Kanit';font-size:1.4rem;font-weight:700;margin-top:8px" id="oneqr-score">0 / 30</div>
+      <div class="muted" id="oneqr-msg" style="margin-bottom:6px"></div>
+      <div class="row" style="justify-content:center">
+        <button class="btn ghost" id="oneqr-retry">↺ ทำใหม่</button>
+        <button class="btn" id="oneqr-explain">📖 ดูเฉลยละเอียด</button>
+      </div>
+    </div>
+    <div class="review-grid" id="oneqr-review"></div>
+  </section>
+
   <!-- ============ EXPLANATION pages ============ -->
   <section id="view-explain" class="hidden">
     <div class="toolbar">
@@ -176,6 +258,14 @@
   </div>
 </div>
 
+<!-- jump-to-question modal -->
+<div class="modal" id="jump-modal">
+  <div class="sheet">
+    <div class="sh-head"><h3>ไปข้อที่...</h3><button class="btn ghost sm" id="jump-close">ปิด</button></div>
+    <div class="sh-body"><div class="jump-grid" id="jump-grid"></div></div>
+  </div>
+</div>
+
 <!-- lightbox -->
 <div class="lightbox" id="lightbox"><span class="close">✕</span><img id="lightbox-img" alt=""></div>
 
@@ -194,7 +284,7 @@ const PAPERS = [
   { id:'2567-sci', subject:'science', year:2567, title:'วิทยาศาสตร์ 2567', count:30, qPages:11, aPages:5,
     answers:{1:'2',2:'2',3:'3',4:['1','4'],5:['2','3'],6:'2',7:'2',8:'3',9:'3',10:'4',11:'4',12:'4',13:'2',14:'2',15:'2',16:'2',17:['1','4'],18:'2',19:'3',20:['2','4'],21:'1',22:'1',23:['1','3'],24:'4',25:['2','4'],26:'3',27:'3',28:'3',29:'2',30:'4'} },
 
-  { id:'2568-math', subject:'math', year:2568, title:'คณิตศาสตร์ 2568', count:30, qPages:6, aPages:6,
+  { id:'2568-math', subject:'math', year:2568, title:'คณิตศาสตร์ 2568', count:30, qPages:6, aPages:6, qCrops:30,
     answers:{1:'158',2:'600',3:'7',4:'35',5:'1',6:'72',7:'5',8:'19',9:'9',10:'23',11:'24',12:'5',13:'3',14:'3',15:'60',16:'10',17:'126',18:'2',19:'12',20:'68',21:'1',22:'3',23:'678',24:'3',25:'86',26:'3',27:'150',28:'8',29:'6',30:'9'} },
 
   { id:'2568-sci', subject:'science', year:2568, title:'วิทยาศาสตร์ 2568', count:30, qPages:11, aPages:0,
@@ -241,8 +331,9 @@ function renderHome(){
       <div class="body">
         <div class="best">${b?('🏆 คะแนนสูงสุด '+b.score+'/'+b.total):(hasKey?'ยังไม่เคยทำ':'')}</div>
         <div class="actions">
-          <button class="btn ghost" data-read="${p.id}">📖 อ่านโจทย์</button>
-          ${hasKey?`<button class="btn ${s.btn}" data-practice="${p.id}">📝 ทำข้อสอบ</button>`
+          <button class="btn ghost" data-read="${p.id}">📖 อ่านทั้งหน้า</button>
+          ${p.qCrops?`<button class="btn ${s.btn}" data-oneq="${p.id}">✏️ ทำทีละข้อ</button>`
+            : hasKey?`<button class="btn ${s.btn}" data-practice="${p.id}">📝 ทำข้อสอบ</button>`
                   :`<button class="btn ghost" data-read="${p.id}" disabled style="opacity:.5">ยังไม่มีเฉลย</button>`}
         </div>
       </div>
@@ -250,6 +341,7 @@ function renderHome(){
   }).join('');
   $$('[data-read]').forEach(b=> b.onclick=()=>openPages(b.dataset.read,'read'));
   $$('[data-practice]').forEach(b=> b.onclick=()=>openPages(b.dataset.practice,'practice'));
+  $$('[data-oneq]').forEach(b=> b.onclick=()=>openOneQ(b.dataset.oneq));
 }
 
 /* ---- PAGES (reader / practice) ---- */
@@ -277,7 +369,89 @@ function openExplain(id){
       <img loading="lazy" src="${imgPath(id,'a',i+1)}" alt="เฉลย ${p.title} หน้า ${i+1}" data-zoom></div>`).join('');
   show('explain');
 }
-$('#explain-back').onclick = ()=>{ if(current){ show('pages'); } else goHome(); };
+$('#explain-back').onclick = ()=>{ if(current && current.mode==='oneq') show('oneq'); else if(current) show('pages'); else goHome(); };
+
+/* ---- ONE-QUESTION-AT-A-TIME quiz ---- */
+let qz=null; // {id, count, idx, ans:[], checked:[], ok:[]}
+function openOneQ(id){
+  const p=byId(id);
+  qz={ id, count:p.qCrops, idx:0, ans:Array(p.qCrops).fill(''), checked:Array(p.qCrops).fill(false), ok:Array(p.qCrops).fill(false) };
+  current={ id, mode:'oneq' };
+  $('#oneq-title').textContent = '✏️ ' + p.title;
+  $('#oneq-explain').classList.toggle('hidden', p.aPages===0);
+  renderOneQ();
+  show('oneq');
+}
+function renderOneQ(){
+  const p=byId(qz.id), i=qz.idx, q=i+1;
+  $('#oneq-counter').textContent = `ข้อ ${q} / ${qz.count}`;
+  $('#oneq-bar').style.width = (q/qz.count*100)+'%';
+  const img=$('#oneq-img'); img.src=`img/q/${qz.id}-${q}.jpg`; img.alt=`ข้อ ${q}`;
+  $('#oneq-prev').disabled = (i===0);
+  $('#oneq-next').textContent = (i===qz.count-1) ? 'ดูคะแนนรวม 🎉' : 'ข้อถัดไป ›';
+  const inp=$('#oneq-input'), fb=$('#oneq-feedback'), box=$('#oneq-answerbox');
+  if(qz.checked[i]){
+    box.classList.add('hidden'); fb.classList.remove('hidden');
+    const key=p.answers[q], ok=qz.ok[i];
+    fb.innerHTML = `<div class="fb ${ok?'ok':'no'}">${ok?'✅ ถูกต้อง! เก่งมาก':'❌ ยังไม่ถูก'}
+      <span style="font-weight:400">· คำตอบของหนู: ${qz.ans[i]||'(ว่าง)'}${ok?'':` · เฉลย: <b>${keyText(key)}</b>`}</span></div>`;
+  } else {
+    box.classList.remove('hidden'); fb.classList.add('hidden');
+    inp.value=qz.ans[i]||''; inp.disabled=false; setTimeout(()=>inp.focus(),60);
+  }
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function checkOneQ(){
+  const p=byId(qz.id), i=qz.idx, q=i+1;
+  const val=$('#oneq-input').value.trim();
+  if(!val){ toast('ใส่คำตอบก่อนนะ หรือกด "ข้อถัดไป" เพื่อข้าม'); return; }
+  qz.ans[i]=val; qz.checked[i]=true; qz.ok[i]=isCorrect(p.answers[q], val);
+  renderOneQ();
+}
+$('#oneq-check').onclick = checkOneQ;
+$('#oneq-input').addEventListener('keydown', e=>{ if(e.key==='Enter') checkOneQ(); });
+$('#oneq-next').onclick = ()=>{
+  const i=qz.idx;
+  if(!qz.checked[i]){ const v=$('#oneq-input').value.trim(); if(v) checkOneQ(); }
+  if(qz.idx < qz.count-1){ qz.idx++; renderOneQ(); } else finishOneQ();
+};
+$('#oneq-prev').onclick = ()=>{ if(qz.idx>0){ qz.idx--; renderOneQ(); } };
+$('#oneq-back').onclick = goHome;
+$('#oneq-explain').onclick = ()=> openExplain(qz.id);
+
+function finishOneQ(){
+  const p=byId(qz.id);
+  const score=qz.ok.filter(Boolean).length, pct=Math.round(score/qz.count*100);
+  setBest(p.id, score, qz.count);
+  $('#oneqr-circle').style.setProperty('--p', pct+'%');
+  $('#oneqr-pct').textContent=pct+'%';
+  $('#oneqr-score').textContent=`${score} / ${qz.count} ข้อ`;
+  $('#oneqr-msg').textContent = pct===100?'🏆 เพอร์เฟกต์ ตอบถูกหมดเลย!':pct>=80?'🌟 เก่งมาก!':pct>=50?'💪 ทำได้ดี ฝึกต่ออีกนิด!':'📖 ทบทวนเฉลยแล้วลองใหม่นะ';
+  $('#oneqr-review').innerHTML = Array.from({length:qz.count},(_,i)=>{
+    const q=i+1, done=qz.checked[i], ok=qz.ok[i], cls=!done?'':(ok?'correct':'wrong');
+    return `<div class="review-item ${cls}" data-go="${i}">
+      <div class="rq">ข้อ ${q} ${!done?'⊘':(ok?'✓':'✗')}</div>
+      <div class="ra">คุณ: ${qz.ans[i]||'-'}${ok?'':' · เฉลย: '+keyText(p.answers[q])}</div></div>`;
+  }).join('');
+  $$('#oneqr-review [data-go]').forEach(el=> el.onclick=()=>{ qz.idx=+el.dataset.go; renderOneQ(); show('oneq'); });
+  renderHome();
+  show('oneqresult');
+}
+$('#oneqr-back').onclick = goHome;
+$('#oneqr-retry').onclick = ()=> openOneQ(qz.id);
+$('#oneqr-explain').onclick = ()=> openExplain(qz.id);
+
+/* jump-to-question */
+$('#oneq-jump').onclick = ()=>{
+  $('#jump-grid').innerHTML = Array.from({length:qz.count},(_,i)=>{
+    const cls = qz.idx===i?'now':(qz.checked[i]?(qz.ok[i]?'correct':'wrong'):'');
+    return `<div class="jump-cell ${cls}" data-j="${i}">${i+1}</div>`;
+  }).join('');
+  $$('#jump-grid [data-j]').forEach(c=> c.onclick=()=>{ qz.idx=+c.dataset.j; $('#jump-modal').classList.remove('show'); renderOneQ(); });
+  $('#jump-modal').classList.add('show');
+};
+$('#jump-close').onclick = ()=> $('#jump-modal').classList.remove('show');
+$('#jump-modal').onclick = e=>{ if(e.target.id==='jump-modal') $('#jump-modal').classList.remove('show'); };
 
 /* ---- ANSWER SHEET (practice) ---- */
 $('#fab-answer').onclick = openSheet;
